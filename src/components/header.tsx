@@ -1,22 +1,16 @@
 'use client';
 
 import Image from 'next/image';
-import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { MapPin, Search, ShoppingCart, Bell, ArrowLeftRight } from 'lucide-react';
 import { Button } from './ui/button';
-import Modal from './Modal';
 
 export function Header() {
- const [modalOpen, setModalOpen] = useState(false);
+ const router = useRouter();
 
 
     return (
     <header className="w-full border-b">
-          <Modal 
-            isOpen={modalOpen} 
-            onClose={() => setModalOpen(false)}
-            onSubmit={(data) => console.log(data)}
-          />
         <div className="mx-auto max-w-full w-auto py-4 px-4">
           {/* Desktop View */}
           <div className="hidden md:flex h-16 items-center justify-between gap-6">
@@ -58,7 +52,7 @@ export function Header() {
                 Sell
               </button>
              <Button 
-                onClick={() => setModalOpen(true)}
+                onClick={() => router.push('/authentication/signup')}
                 className="rounded-full px-6 py-2 text-sm"
               >
                 Login
