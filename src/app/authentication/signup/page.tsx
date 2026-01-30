@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { Mail, User } from 'lucide-react';
 import AuthModal from '@/components/Modal';
 
@@ -14,6 +15,7 @@ interface SignupFormData {
 }
 
 export default function SignupPage() {
+  const router = useRouter();
   const [formData, setFormData] = useState<SignupFormData>({
     firstName: '',
     lastName: '',
@@ -37,8 +39,8 @@ export default function SignupPage() {
 
     setTimeout(() => {
       console.log('Signup data:', formData);
-      setLoading(false);
-      window.location.reload()
+      router.push('/authentication/verify-email');
+     
     }, 1000);
   };
 
