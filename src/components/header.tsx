@@ -1,12 +1,22 @@
 'use client';
 
 import Image from 'next/image';
+import { useState } from 'react';
 import { MapPin, Search, ShoppingCart, Bell, ArrowLeftRight } from 'lucide-react';
 import { Button } from './ui/button';
+import Modal from './Modal';
 
 export function Header() {
+ const [modalOpen, setModalOpen] = useState(false);
+
+
     return (
     <header className="w-full border-b">
+          <Modal 
+            isOpen={modalOpen} 
+            onClose={() => setModalOpen(false)}
+            onSubmit={(data) => console.log(data)}
+          />
         <div className="mx-auto max-w-full w-auto py-4 px-4">
           {/* Desktop View */}
           <div className="hidden md:flex h-16 items-center justify-between gap-6">
@@ -47,7 +57,10 @@ export function Header() {
               <button className="text-sm font-medium text-gray-700 hover:text-black">
                 Sell
               </button>
-              <Button className="rounded-full px-6 py-2 text-sm">
+             <Button 
+                onClick={() => setModalOpen(true)}
+                className="rounded-full px-6 py-2 text-sm"
+              >
                 Login
               </Button>
             </div>
