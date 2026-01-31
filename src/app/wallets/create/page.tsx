@@ -3,6 +3,8 @@
 import React, { useState, useRef } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import SuccessWalletModal from '@/components/SuccessWalletModal';
+import WalletRequiredModal from '@/components/WalletRequiredModal';
 
 interface CreateWalletFormData {
   code: string;
@@ -15,7 +17,8 @@ export default function Create() {
   const [formData, setFormData] = useState<CreateWalletFormData>({ code: '' });
   const [error, setError] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [success, setSuccess] = useState<boolean>(false);
+  const [showSuccessModal, setShowSuccessModal] = useState<boolean>(false);
+  const [showWalletRequiredModal, setShowWalletRequiredModal] = useState<boolean>(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -56,22 +59,18 @@ export default function Create() {
       });
 
       if (response.success) {
-        setSuccess(true);
-
         localStorage.setItem('walletId', response.walletId);
-        
-        setTimeout(() => {
-          router.push('/wallets/prompt');
-        }, 1500);
+        setIsLoading(false);
+        setShowSuccessModal(true);
         return true;
       }
+      setIsLoading(false);
       return false;
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'An error occurred';
       setError(errorMessage);
-      return false;
-    } finally {
       setIsLoading(false);
+      return false;
     }
   };
 
@@ -86,7 +85,7 @@ export default function Create() {
   };
 
   const handleSkip = () => {
-    router.push('/app');
+    setShowWalletRequiredModal(true);
   };
 
   return (
@@ -137,40 +136,38 @@ export default function Create() {
                 placeholder=""
                 maxLength={11}
                 inputMode="numeric"
-                disabled={isLoading || success}
-                required
-                className={`w-full px-3 py-2 text-center text-2xl bg-gray-100  border-2 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${
-                  error ? 'border-red-500' : 'border-gray-300'
-                } ${isLoading || success ? 'opacity-50 cursor-not-allowed' : ''}`}
+              disabled={isLoading}
+              required
+              className={`w-full px-3 py-2 text-center text-2xl bg-gray-100  border-2 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${
+                error ? 'border-red-500' : 'border-gray-300'
+              } ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
               />
               {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
-              {success && <p className="text-green-500 text-sm mt-2">Wallet created successfully! Redirecting...</p>}
             </div>
-        </form>
-          
-        <div className='flex flex-col mt-4 gap-4'>
+
+             <div className='flex flex-col mt-4 gap-4'>
             
             <button 
               type="submit" 
-              onClick={(e) => {
-                const form = (e.currentTarget as HTMLElement).closest('form');
-                if (form) form.dispatchEvent(new Event('submit', { bubbles: true }));
-              }}
-              disabled={isLoading || success}
+              onClick={() => handleSubmit}
+              disabled={isLoading}
               className='w-full hover:bg-blue-800 disabled:opacity-50 disabled:cursor-not-allowed px-5 py-3 text-white text-center text-sm bg-blue-600 rounded-3xl transition-all'
             >
-              {isLoading ? 'Creating Wallet...' : success ? 'Wallet Created!' : 'Create Wallet'}
+              {isLoading ? 'Creating Wallet...' : 'Create Wallet'}
             </button>
 
             <button 
-              type="button"
+              type="submit"
               onClick={handleSkip}
-              disabled={isLoading || success}
+              disabled={isLoading}
               className='w-full disabled:opacity-50 disabled:cursor-not-allowed px-5 py-3 text-blue-600 text-center border border-blue-600 text-sm bg-white rounded-3xl transition-all hover:bg-blue-50'
             >
             Skip For Now
             </button>
         </div>
+        </form>
+          
+       
         </div>
       </div>
 
@@ -186,6 +183,16 @@ export default function Create() {
                 />
             </div>
         </div>
+
+        {/* Modals */}
+        <SuccessWalletModal 
+          isOpen={showSuccessModal}
+          onClose={() => setShowSuccessModal(false)}
+        />
+        <WalletRequiredModal 
+          isOpen={showWalletRequiredModal}
+          onClose={() => setShowWalletRequiredModal(false)}
+        />
     </div>
   );
 }
