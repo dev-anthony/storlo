@@ -26,24 +26,23 @@ export default function VerifyEmailPage() {
     setError('');
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    if (formData.code.length !== 6) {
-      setError('Please enter a valid 6-digit code');
-      return;
-    }
-
-    setLoading(true);
-
-    setTimeout(() => {
-      console.log('Verification code:', formData.code);
-      // In real app, verify the code with backend
-      // Then redirect to next step or dashboard
-      setLoading(false);
-      // router.push('/authentication/next-step');
-    }, 1000);
-  };
+ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+     e.preventDefault();
+     setLoading(true);
+ 
+     try {
+       // Simulate API call
+       await new Promise((resolve) => setTimeout(resolve, 1000));
+       
+       console.log('Signup data:', formData.code);
+       
+       
+       router.push('/authentication/verify-email-password');
+     } catch (error) {
+       console.error('Signup error:', error);
+       setLoading(false);
+     }
+   };
 
   const handleResendCode = () => {
     console.log('Resending code to', placeholderEmail);

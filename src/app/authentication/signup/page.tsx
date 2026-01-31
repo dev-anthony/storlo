@@ -33,15 +33,22 @@ export default function SignupPage() {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
 
-    setTimeout(() => {
+    try {
+      // Simulate API call
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      
       console.log('Signup data:', formData);
+      
+      
       router.push('/authentication/verify-email');
-     
-    }, 1000);
+    } catch (error) {
+      console.error('Signup error:', error);
+      setLoading(false);
+    }
   };
 
  
@@ -161,6 +168,7 @@ export default function SignupPage() {
               <button
                 type="submit"
                 disabled={loading || !formData.agreeToTerms}
+                onClick={()=>handleSubmit}
                 className="w-full mt-6 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-600 text-white font-semibold py-2.5 rounded-4xl transition-all duration-200 flex items-center justify-center"
               >
                 {loading ? (
