@@ -91,57 +91,44 @@ export function ProductDetail({ product, onBack, onSave, isSaved }: ProductDetai
           </div>
 
           {/* Ratings */}
-          <div className="w-full">
-            <h3 className="font-semibold text-gray-900 mb-4">Ratings & Reviews</h3>
+         {/* Ratings & Reviews */}
+            <div className="w-full">
 
-            <div className="flex gap-6 mb-6">
-              <div className="flex flex-col items-center justify-center min-w-[64px]">
-                <span className="text-5xl font-bold text-gray-900 leading-none">{avgRating.toFixed(1)}</span>
-                <div className="flex gap-0.5 my-1.5">
-                  {[1, 2, 3, 4, 5].map(s => (
-                    <Star key={s} className={`w-3.5 h-3.5 ${s <= Math.round(avgRating) ? 'fill-yellow-400 text-yellow-400' : 'text-gray-200'}`} />
-                  ))}
-                </div>
-                <span className="text-xs text-gray-400">{product.ratings.length} reviews</span>
-              </div>
-
-              <div className="flex-1 flex flex-col gap-1.5 justify-center">
-                {starCounts.map(({ star, count }) => (
-                  <div key={star} className="flex items-center gap-2">
-                    <span className="text-xs text-gray-400 w-2.5 text-right">{star}</span>
-                    <Star className="w-3 h-3 fill-yellow-400 text-yellow-400 shrink-0" />
-                    <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-yellow-400 rounded-full"
-                        style={{ width: product.ratings.length ? `${(count / product.ratings.length) * 100}%` : '0%' }}
-                      />
-                    </div>
-                    <span className="text-xs text-gray-400 w-4">{count}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="flex flex-col gap-4">
-              {product.ratings.length === 0 && (
+            {/* Review cards */}
+            {product.ratings.length === 0 ? (
                 <p className="text-sm text-gray-400">No reviews yet.</p>
-              )}
-              {product.ratings.map(r => (
-                <div key={r.id} className="border-b border-gray-100 pb-4 last:border-0">
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-sm font-semibold text-gray-900">{r.user}</span>
-                    <span className="text-xs text-gray-400">{r.date}</span>
-                  </div>
-                  <div className="flex gap-0.5 mb-1.5">
-                    {[1, 2, 3, 4, 5].map(s => (
-                      <Star key={s} className={`w-3 h-3 ${s <= r.stars ? 'fill-yellow-400 text-yellow-400' : 'text-gray-200'}`} />
-                    ))}
-                  </div>
-                  <p className="text-xs text-gray-600 leading-relaxed">{r.comment}</p>
+            ) : (
+                <div className="flex flex-col gap-3">
+                {product.ratings.map(r => (
+                    <div key={r.id} className="border border-gray-100 rounded-2xl p-4 bg-gray-50">
+
+                    {/* Top row: avatar + name + verified tag */}
+                    <div className="flex items-center gap-3 mb-3">
+                        <img
+                        src={r.avatar}
+                        alt={r.user}
+                        className="w-10 h-10 rounded-full object-cover shrink-0"
+                        />
+                        <div className="flex-1 min-w-0">
+                        <div className="flex items-center justify-between gap-2">
+                            <span className="text-sm font-semibold text-gray-900 truncate">{r.user}</span>
+                            <span className="text-xs text-gray-400 shrink-0">{r.stars} verified rating</span>
+                        </div>
+                        <div className="flex gap-0.5 mt-1">
+                            {[1, 2, 3, 4, 5].map(s => (
+                            <Star key={s} className={`w-3 h-3 ${s <= r.stars ? 'fill-yellow-400 text-yellow-400' : 'text-gray-200'}`} />
+                            ))}
+                        </div>
+                        </div>
+                    </div>
+
+                    <p className="text-xs text-gray-600 leading-relaxed">{r.comment}</p>
+                    <span className="text-xs text-gray-300 mt-2 block">{r.date}</span>
+                    </div>
+                ))}
                 </div>
-              ))}
+            )}
             </div>
-          </div>
         </div>
 
         {/* RIGHT — image slider */}

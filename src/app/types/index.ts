@@ -1,6 +1,7 @@
 export interface Rating {
   id: number;
   user: string;
+  avatar: string;
   stars: number;
   comment: string;
   date: string;
