@@ -84,6 +84,8 @@ export default function Page() {
             isSaved={savedProducts.includes((view as { type: 'product'; product: Product }).product.id)}
           />
           <SimilarProducts currentProduct={view.product} onProductClick={handleProductClick} />
+           <CTA />
+          <Footer />
         </div>
       ) : (
         <>
