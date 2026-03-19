@@ -15,7 +15,7 @@ export default function WalletRequiredModal({ isOpen, onClose }: WalletRequiredM
 
   const handleCreateWallet = () => {
     if (onClose) onClose();
-    router.push('/wallets/create');
+    router.push('/wallets');
   };
 
   const handleExplore = () => {

@@ -27,22 +27,19 @@ export default function VerifyEmailPage() {
   };
 
  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-     e.preventDefault();
-     setLoading(true);
- 
-     try {
-       // Simulate API call
-       await new Promise((resolve) => setTimeout(resolve, 1000));
-       
-       console.log('Signup data:', formData.code);
-       
-       
-       router.push('/authentication/verify-email-password');
-     } catch (error) {
-       console.error('Signup error:', error);
-       setLoading(false);
-     }
-   };
+  e.preventDefault();
+  setLoading(true);
+
+  try {
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    // Save verified code to localStorage so next page can read it
+    localStorage.setItem('verified_code', formData.code);
+    router.push('/authentication/verify-email-password');
+  } catch (error) {
+    console.error('Signup error:', error);
+    setLoading(false);
+  }
+};
 
   const handleResendCode = () => {
     console.log('Resending code to', placeholderEmail);

@@ -1,0 +1,223 @@
+// wallets/page.tsx
+'use client';
+
+import React, { useState, useRef } from 'react';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import SuccessWalletModal from '@/components/SuccessWalletModal';
+import WalletRequiredModal from '@/components/WalletRequiredModal';
+
+type WalletView = 'prompt' | 'create';
+
+export default function WalletsPage() {
+  const router = useRouter();
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const [view, setView] = useState<WalletView>('prompt');
+  const [bvn, setBvn] = useState('');
+  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [showWalletRequiredModal, setShowWalletRequiredModal] = useState(false);
+
+  const handleBvnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.replace(/\D/g, '').slice(0, 11);
+    setBvn(value);
+    setError('');
+  };
+
+  const validateBVN = (value: string): boolean => {
+    if (!value || value.length !== 11) {
+      setError('BVN must be 11 digits');
+      return false;
+    }
+    if (!/^\d+$/.test(value)) {
+      setError('BVN must contain only numbers');
+      return false;
+    }
+    return true;
+  };
+
+  const createWallet = async (value: string): Promise<boolean> => {
+    try {
+      setIsLoading(true);
+      setError('');
+
+      const response = await new Promise<{ success: boolean; walletId: string }>(
+        (resolve, reject) => {
+          setTimeout(() => {
+            if (Math.random() > 0.05) {
+              resolve({ success: true, walletId: `WALLET_${Date.now()}` });
+            } else {
+              reject(new Error('Failed to create wallet. Please try again.'));
+            }
+          }, 1500);
+        }
+      );
+
+      if (response.success) {
+        localStorage.setItem('walletId', response.walletId);
+        setIsLoading(false);
+        setShowSuccessModal(true);
+        return true;
+      }
+      setIsLoading(false);
+      return false;
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An error occurred');
+      setIsLoading(false);
+      return false;
+    }
+  };
+
+  const handleCreateSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!validateBVN(bvn)) return;
+    await createWallet(bvn);
+  };
+
+  const handleSkip = () => {
+    setShowWalletRequiredModal(true);
+  };
+
+  return (
+    <div className="flex min-h-screen bg-white">
+      {/* Left Side */}
+      <div className="w-full md:w-1/2 flex justify-center p-6 md:p-8 lg:p-12">
+        <div className="w-full max-w-md">
+          <div className="mb-8 flex items-center justify-between gap-2">
+            <Image src="/vector1.png" alt="Storlo" width={100} height={50} priority />
+          </div>
+
+          {/* ── PROMPT VIEW ────────────────────────────────────────── */}
+          {view === 'prompt' && (
+            <>
+              <div className="mb-8">
+                <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                  Account Created Successfully
+                </h1>
+                <p className="text-gray-600 leading-relaxed text-sm">
+                  <span className="font-semibold text-sm">
+                    Welcome to Storlo. Your account is ready!.
+                  </span>
+                  <br />
+                  To buy products, make offers, and place bids, you'll need a Storlo wallet.
+                  Creating your wallet takes less than a minute.
+                </p>
+              </div>
+
+              <div className="flex flex-col gap-4">
+                <button
+                  onClick={() => setView('create')}
+                  className="w-full hover:bg-blue-800 px-5 py-3 text-white text-center text-sm bg-blue-600 rounded-3xl transition-all"
+                >
+                  Continue to Wallet Setup
+                </button>
+                <button
+                  onClick={handleSkip}
+                  className="w-full px-5 py-3 text-blue-600 text-center border border-blue-600 text-sm bg-white rounded-3xl transition-all hover:bg-blue-50"
+                >
+                  Skip Setup
+                </button>
+              </div>
+            </>
+          )}
+
+          {/* ── CREATE VIEW ────────────────────────────────────────── */}
+          {view === 'create' && (
+            <>
+              <div className="mb-4">
+                <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                  Create Your Storlo Wallet
+                </h1>
+                <p className="text-gray-600 leading-relaxed text-sm">
+                  Your wallet lets you buy products, make offers, and place bids.
+                </p>
+              </div>
+
+              <div className="px-4 py-2 mb-8 flex flex-col gap-3 bg-blue-100 border-2 border-blue-700 rounded-2xl">
+                <p className="text-sm text-blue-600 leading-6">
+                  We use your BVN to create and secure your Storlo wallet.
+                  <br />
+                  Your BVN helps us:
+                </p>
+                <ul className="list-disc list-inside pl-5 text-sm text-blue-600">
+                  <li>Verify your identity</li>
+                  <li>Prevent fraud and fake accounts</li>
+                  <li>Ensure secure payments and refunds</li>
+                  <li>Comply with financial regulations</li>
+                </ul>
+              </div>
+
+              <form onSubmit={handleCreateSubmit}>
+                <div>
+                  <label htmlFor="bvn" className="block text-sm font-medium text-gray-700 mb-2">
+                    BVN <span className="text-gray-500 text-xs">(11-digit BVN)</span>
+                  </label>
+                  <input
+                    ref={inputRef}
+                    id="bvn"
+                    type="text"
+                    name="bvn"
+                    value={bvn}
+                    onChange={handleBvnChange}
+                    maxLength={11}
+                    inputMode="numeric"
+                    disabled={isLoading}
+                    required
+                    className={`w-full px-3 py-2 text-center text-2xl bg-gray-100 border-2 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${
+                      error ? 'border-red-500' : 'border-gray-300'
+                    } ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  />
+                  {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+                </div>
+
+                <div className="flex flex-col mt-4 gap-4">
+                  <button
+                    type="submit"
+                    disabled={isLoading || bvn.length !== 11}
+                    className="w-full hover:bg-blue-800 disabled:opacity-50 disabled:cursor-not-allowed px-5 py-3 text-white text-center text-sm bg-blue-600 rounded-3xl transition-all"
+                  >
+                    {isLoading ? 'Creating Wallet...' : 'Create Wallet'}
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={handleSkip}
+                    disabled={isLoading}
+                    className="w-full disabled:opacity-50 disabled:cursor-not-allowed px-5 py-3 text-blue-600 text-center border border-blue-600 text-sm bg-white rounded-3xl transition-all hover:bg-blue-50"
+                  >
+                    Skip For Now
+                  </button>
+                </div>
+              </form>
+            </>
+          )}
+        </div>
+      </div>
+
+      {/* Right Side */}
+      <div className="relative hidden rounded-3xl md:flex md:w-1/2 bg-blue-600 items-center justify-center overflow-hidden">
+        <div className="relative w-full h-full max-w-2xl">
+          <Image
+            src="/hero.png"
+            alt="Shopping Experience"
+            fill
+            priority
+            className="object-cover object-[20%_center] scale-x-[-1] rounded-2xl"
+          />
+        </div>
+      </div>
+
+      {/* Modals */}
+      <SuccessWalletModal
+        isOpen={showSuccessModal}
+        onClose={() => setShowSuccessModal(false)}
+      />
+      <WalletRequiredModal
+        isOpen={showWalletRequiredModal}
+        onClose={() => setShowWalletRequiredModal(false)}
+      />
+    </div>
+  );
+}

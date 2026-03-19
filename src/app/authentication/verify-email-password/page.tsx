@@ -1,9 +1,9 @@
 'use client';
-
-import React, { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Lock, Eye, EyeOff, AlertOctagon  } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+
 
 
 interface VerifyEmailFormData {
@@ -21,12 +21,17 @@ export default function VerifyEmailPassordPage() {
     confirmPassword: '',
   });
   const [loading, setLoading] = useState(false);
+  const [codeVerified, setCodeVerified] = useState(false);
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
 
   const placeholderEmail = 'user@example.com';
+  useEffect(() => {
+  const code = localStorage.getItem('verified_code');
+  if (code && code.length === 6) setCodeVerified(true);
+}, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -42,8 +47,8 @@ export default function VerifyEmailPassordPage() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (formData.code.length !== 6) {
-      setError('Please enter a valid 6-digit code');
+      if (!codeVerified) {
+      setError('Email verification required');
       return;
     }
 
@@ -64,7 +69,7 @@ export default function VerifyEmailPassordPage() {
       console.log('Password:', formData.password);
    
       setLoading(false);
-      router.push('/wallets/prompt');
+      router.push('/wallets');
     }, 1000);
   };
 
@@ -162,7 +167,7 @@ export default function VerifyEmailPassordPage() {
 
             <button
               type="submit"
-              disabled={loading || formData.code.length !== 6 || !formData.password || !formData.confirmPassword}
+              disabled={loading || !codeVerified || !formData.password || !formData.confirmPassword}
               className="w-full mt-6 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-600 text-white font-semibold py-2.5 rounded-3xl transition-all duration-200 flex items-center justify-center"
             >
               {loading ? (

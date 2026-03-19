@@ -39,7 +39,7 @@ export default function Promt() {
           
             <div className='flex flex-col gap-4'>
              
-              <button onClick={() => router.push('/wallets/create')} className='w-full hover:bg-blue-800 px-5 py-3 text-white text-center text-sm bg-blue-600 rounded-3xl transition-all'>
+              <button onClick={() => router.push('/wallets')} className='w-full hover:bg-blue-800 px-5 py-3 text-white text-center text-sm bg-blue-600 rounded-3xl transition-all'>
                 Continue to Wallet Setup
               </button>
 

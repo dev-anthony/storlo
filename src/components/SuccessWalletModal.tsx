@@ -15,6 +15,7 @@ export default function SuccessWalletModal({ isOpen, onClose }: SuccessWalletMod
 
   const handleExplore = () => {
     if (onClose) onClose();
+    router.push('/home');
     // router.push('/app');
   };
 
@@ -25,6 +26,10 @@ export default function SuccessWalletModal({ isOpen, onClose }: SuccessWalletMod
     
       <div className="relative bg-white rounded-3xl shadow-2xl p-8 max-w-md w-full mx-4 z-10">
         
+        
+        <div className="flex justify-center mb-6">
+          <div className="text-5xl">🎉</div>
+        </div>
         
         <div className="text-center mb-6">
           <h2 className="text-2xl font-bold text-gray-900 mb-2">Wallet created successfully</h2>

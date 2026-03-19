@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { X, Eye, EyeOff, Mail, Lock } from 'lucide-react';
+import {useRouter} from 'next/navigation'
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -16,6 +17,7 @@ interface AuthFormData {
 }
 
 export default function AuthModal({ isOpen, onClose, onSubmit }: AuthModalProps) {
+  const router = useRouter();
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState<AuthFormData>({
@@ -38,13 +40,14 @@ export default function AuthModal({ isOpen, onClose, onSubmit }: AuthModalProps)
     setLoading(true);
     
     
-    setTimeout(() => {
+   
       if (onSubmit) {
         onSubmit(formData);
+        router.push('/home');
       }
       setLoading(false);
-    }, 1000);
-    window.location.reload();
+    
+   
   };
 
   const toggleMode = () => {
