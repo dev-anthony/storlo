@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import { ArrowLeft, Heart, MapPin, ChevronLeft, ChevronRight, Star } from 'lucide-react';
 import { Product } from '@/app/types';
+import {useRouter} from 'next/navigation';
 
 interface ProductDetailProps {
   product: Product;
@@ -13,6 +14,7 @@ interface ProductDetailProps {
 }
 
 export function ProductDetail({ product, onBack, onSave, isSaved }: ProductDetailProps) {
+  const router = useRouter();
   const [imgIndex, setImgIndex] = useState(0);
   const images = product.images?.length ? product.images : [product.image];
 
@@ -85,7 +87,7 @@ export function ProductDetail({ product, onBack, onSave, isSaved }: ProductDetai
           {/* Price + Purchase */}
           <div className="flex items-center justify-between mb-8">
             <span className="text-2xl font-bold text-gray-900">{product.price}</span>
-            <button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-3xl text-sm font-semibold transition-colors">
+            <button onClick={() => router.push(`/checkout?productId=${product.id}`)} className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-3xl text-sm font-semibold transition-colors">
               Purchase
             </button>
           </div>

@@ -71,7 +71,7 @@ export function Hero({ breadcrumb, onBreadcrumbClick }: HeroProps) {
             <React.Fragment key={index}>
               <span
                 onClick={() => !isLast && onBreadcrumbClick(index)}
-                className={`text-center text-sm font-medium transition-colors ${
+                className={`text-center text-sm font-bold transition-colors ${
                   isLast
                     ? 'text-white cursor-default'
                     : 'text-blue-200 hover:text-white cursor-pointer'
