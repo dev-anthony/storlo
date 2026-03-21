@@ -82,7 +82,7 @@ export function TopUpModal({ isOpen, onClose, onSuccess }: TopUpModalProps) {
       />
 
       {/* Modal */}
-      <div className="relative w-full max-w-md bg-white rounded-2xl shadow-2xl overflow-hidden z-10">
+      <div className="relative w-full max-w-md p-6 bg-white rounded-2xl shadow-2xl overflow-hidden z-10">
 
         {/* ── LOADING STATE ──────────────────────────────────────── */}
         {state === 'loading' && (
@@ -115,7 +115,7 @@ export function TopUpModal({ isOpen, onClose, onSuccess }: TopUpModalProps) {
         {state === 'form' && (
           <>
             {/* Header */}
-            <div className="flex items-center justify-between px-5 py-4 bg-white border-2 border-blue-500 rounded-t-2xl">
+            <div className="flex items-center justify-between px-5 py-4 bg-white border-2 mb-2 border-blue-400 rounded-2xl">
               <div className="flex items-center gap-2">
                 <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
                   <Wallet className="w-4 h-4 text-blue-600" />
@@ -127,21 +127,19 @@ export function TopUpModal({ isOpen, onClose, onSuccess }: TopUpModalProps) {
                 <div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center border border-gray-200">
                   <Building2 className="w-5 h-5 text-gray-400" />
                 </div>
-                <button
+                {/* <button
                   onClick={onClose}
                   className="text-gray-400 hover:text-gray-600 transition-colors"
                 >
                   <X className="w-4 h-4" />
-                </button>
+                </button> */}
               </div>
             </div>
 
             {/* Body */}
             <div className="bg-gray-100 px-5 py-5">
-              <p className="text-xs text-gray-500 mb-1">Please make a transfer to</p>
-              <p className="text-sm font-bold text-gray-900 mb-4">
-                {BANK_DETAILS.accountName}
-              </p>
+              <p className="text-[10px] text-gray-500 mb-1">Please make a transfer to 
+                <span className="text-[10px] font-bold text-gray-900 mb-4"> {BANK_DETAILS.accountName}</span></p>
 
               {/* Details table */}
               <div className="bg-white rounded-xl overflow-hidden border border-gray-200">
@@ -149,19 +147,19 @@ export function TopUpModal({ isOpen, onClose, onSuccess }: TopUpModalProps) {
                 <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
                   <div className="flex items-center gap-2 text-gray-500">
                     <Building2 className="w-4 h-4 shrink-0" />
-                    <span className="text-sm">Bank Name</span>
+                    <span className="text-xs">Bank Name</span>
                   </div>
-                  <span className="text-sm font-semibold text-gray-900">{BANK_DETAILS.bankName}</span>
+                  <span className="text-xs font-semibold text-gray-900">{BANK_DETAILS.bankName}</span>
                 </div>
 
                 {/* Account number */}
                 <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
                   <div className="flex items-center gap-2 text-gray-500">
                     <Hash className="w-4 h-4 shrink-0" />
-                    <span className="text-sm">Account Number</span>
+                    <span className="text-xs">Account Number</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="text-sm font-semibold text-gray-900 tracking-wider">
+                    <span className="text-xs font-semibold text-gray-900 tracking-wider">
                       {BANK_DETAILS.accountNumber}
                     </span>
                     <button
@@ -180,9 +178,9 @@ export function TopUpModal({ isOpen, onClose, onSuccess }: TopUpModalProps) {
                 <div className="flex items-center justify-between px-4 py-3">
                   <div className="flex items-center gap-2 text-gray-500">
                     <Hash className="w-4 h-4 shrink-0" />
-                    <span className="text-sm">Minimum Top Up</span>
+                    <span className="text-xs">Minimum Top Up</span>
                   </div>
-                  <span className="text-sm font-semibold text-gray-900">{BANK_DETAILS.minimumTopUp}</span>
+                  <span className="text-xs font-semibold text-gray-900">{BANK_DETAILS.minimumTopUp}</span>
                 </div>
               </div>
 
@@ -190,7 +188,7 @@ export function TopUpModal({ isOpen, onClose, onSuccess }: TopUpModalProps) {
               <div className="mt-4 flex items-center justify-between">
                 <p className="text-xs text-gray-500">
                   This account is valid for{' '}
-                  <span className={`font-semibold ${timeLeft < 60 ? 'text-red-500' : 'text-gray-700'}`}>
+                  <span className={`font-semibold ${timeLeft < 60 ? 'text-red-400' : 'text-gray-800'}`}>
                     {formatTime(timeLeft)}
                   </span>
                 </p>
