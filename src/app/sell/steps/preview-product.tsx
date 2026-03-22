@@ -8,6 +8,7 @@ import { HeaderAuth } from '@/components/header-auth';
 import { Footer } from '@/components/footer';
 import { StatusModal } from '@/components/status-modal';
 import { UploadedImage } from './step-four';
+import { useRouter } from 'next/navigation';
 
 interface PreviewProductProps {
   form: {
@@ -27,6 +28,7 @@ export function PreviewProduct({ form, onBack, onPublished }: PreviewProductProp
   const [previewImg, setPreviewImg] = React.useState(0);
   const [showPublish, setShowPublish] = React.useState(false);
   const images = form.images.map(i => i.url);
+  const router = useRouter();
 
   return (
     <div className="min-h-screen w-full overflow-x-hidden flex flex-col">
@@ -137,7 +139,7 @@ export function PreviewProduct({ form, onBack, onPublished }: PreviewProductProp
         successTitle="Product Published!"
         successMessage="Your product is now live and available for customers to discover."
         actionLabel="View All Products"
-        onAction={onPublished}
+        onAction={()=> router.push('/my-product')}
       />
     </div>
   );
