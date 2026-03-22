@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Wallet, Building2, Hash, Copy, Check, X, Loader2 } from 'lucide-react';
 import Image from 'next/image';
 
+
 interface TopUpModalProps {
   isOpen: boolean;
   onClose: () => void;
