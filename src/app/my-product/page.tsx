@@ -16,9 +16,9 @@ interface MyProduct extends Product {
   status: ProductStatus;
 }
 
-const myProducts: MyProduct[] = allProducts.slice(0, 14).map((p, i) => ({
+const myProducts: MyProduct[] = allProducts.map((p, i) => ({
   ...p,
-  status: i < 9 ? 'active' : i < 11 ? 'sold' : 'draft',
+  status: i < 20 ? 'active' : i < 25 ? 'sold' : 'draft',
 }));
 
 const TABS: { key: ProductStatus; label: string }[] = [
