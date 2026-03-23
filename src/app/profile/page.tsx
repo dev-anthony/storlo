@@ -42,7 +42,7 @@ export default function ProfilePage() {
         <div className="w-full max-w-2xl flex flex-col gap-4">
 
           {/* Identity card */}
-          <Card className="py-0 gap-0 overflow-hidden border-gray-100">
+          <Card className="py-0 gap-0 overflow-hidden bg-gray-50 border-gray-100">
             <CardContent className="p-6">
               <div className="flex items-center gap-5">
                 <Avatar
@@ -57,7 +57,7 @@ export default function ProfilePage() {
                 </div>
                 <Button
                   onClick={() => setEditOpen(true)}
-                  className="shrink-0 rounded-3xl h-auto py-2 px-5 bg-white text-gray-900 border border-gray-200 hover:bg-gray-50 text-sm font-medium shadow-none"
+                  className="shrink-0 rounded-4xl h-auto py-3 px-5 bg-blue-500 text-white  hover:bg-blue-600 text-sm font-medium shadow-md"
                 >
                   Edit
                 </Button>
@@ -66,7 +66,7 @@ export default function ProfilePage() {
           </Card>
 
           {/* Basic info card */}
-          <Card className="py-0 gap-0 border-gray-100">
+          <Card className="py-0 gap-0 bg-gray-50 border-gray-100">
             <CardHeader className="px-6 pt-5 pb-3">
               <CardTitle className="text-sm font-semibold text-gray-900">
                 Basic Information
@@ -81,7 +81,7 @@ export default function ProfilePage() {
           </Card>
 
           {/* Contact info card */}
-          <Card className="py-0 gap-0 border-gray-100">
+          <Card className="py-0 gap-0 bg-gray-50 border-gray-100">
             <CardHeader className="px-6 pt-5 pb-3">
               <CardTitle className="text-sm font-semibold text-gray-900">
                 Contact Information
