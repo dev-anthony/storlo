@@ -9,6 +9,7 @@ import { Avatar } from '@/app/profile/components/avatar';
 import { InfoField } from '@/app/profile/components/info-field';
 import { EditModal } from '@/app/profile/components/edit-modal';
 import { UserProfile, getInitials } from '@/app/profile/types/types';
+import { Edit } from 'lucide-react';
 
 const INITIAL: UserProfile = {
   firstName: 'Nelson',
@@ -57,9 +58,10 @@ export default function ProfilePage() {
                 </div>
                 <Button
                   onClick={() => setEditOpen(true)}
-                  className="shrink-0 rounded-4xl h-auto py-3 px-5 bg-blue-500 text-white  hover:bg-blue-600 text-sm font-medium shadow-md"
+                  className="shrink-0 rounded-4xl h-auto py-3 px-5 bg-blue-500 text-white  hover:bg-blue-600 text-sm font-semibold shadow-md"
                 >
-                  Edit
+                  <Edit className="w-4 h-4 mr-1" />
+                  Edit profile
                 </Button>
               </div>
             </CardContent>
