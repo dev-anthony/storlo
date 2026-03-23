@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useRef } from 'react';
-import { Camera } from 'lucide-react';
+import { Edit } from 'lucide-react';
 
 interface AvatarProps {
   avatar: string | null;
@@ -36,9 +36,9 @@ export function Avatar({ avatar, initials, size = 96, onUpload }: AvatarProps) {
         <>
           <button
             onClick={() => fileRef.current?.click()}
-            className="absolute bottom-1 right-1 w-7 h-7 bg-white border border-gray-200 rounded-full flex items-center justify-center shadow-md hover:bg-gray-50 transition-colors"
+            className="absolute bottom-1 right-1 w-7 h-7 bg-blue-500 border border-gray-200 rounded-full flex items-center justify-center shadow-md hover:bg-gray-50 transition-colors"
           >
-            <Camera className="w-3.5 h-3.5 text-gray-600" />
+            <Edit className="w-3.5 h-3.5 text-gray-200" />
           </button>
           <input
             ref={fileRef}
