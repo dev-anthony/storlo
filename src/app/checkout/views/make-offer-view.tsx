@@ -50,7 +50,6 @@ export function MakeOfferView({ product, walletBalance, formatNaira, onTopUp }: 
     }, 300);
   };
 
-  // Simulates fetching offer result — random for demo
   const handleViewOrder = () => {
     const outcomes: OfferState[] = ['accepted', 'declined', 'negotiated'];
     setOfferState(outcomes[Math.floor(Math.random() * outcomes.length)]);
@@ -80,48 +79,65 @@ export function MakeOfferView({ product, walletBalance, formatNaira, onTopUp }: 
   // ── SELECT ────────────────────────────────────────────────────
   if (offerState === 'select') {
     return (
-      <>
-        <CheckoutProductCard product={product} />
+      <div className="flex flex-col lg:flex-row gap-6">
 
-        <div className="w-full bg-white border border-gray-100 rounded-2xl shadow-sm p-5">
-          <h3 className="font-semibold text-gray-900 mb-1">Select Your Offer Price</h3>
-          <p className="text-xs text-gray-400 mb-4">
-            Max offer: {formatNaira(offerPrices[0])} — choose a price to send to the seller.
-          </p>
-          <div className="flex flex-col gap-3">
-            {offerPrices.map(price => {
-              const isSelected = pendingPrice === price;
-              return (
-                <button
-                  key={price}
-                  onClick={() => handleSelectOffer(price)}
-                  className={`flex items-center gap-3 px-4 py-3 rounded-2xl border-2 transition-all text-left
-                    ${isSelected ? 'border-blue-400 bg-blue-100' : 'border-gray-100 hover:border-blue-300 hover:bg-blue-50'}`}
-                >
-                  <span className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-all
-                    ${isSelected ? 'border-blue-400 bg-blue-100' : 'border-gray-300 bg-white'}`}>
-                    {isSelected && <span className="w-2 h-2 rounded-full bg-blue-400" />}
-                  </span>
-                  <span className="text-sm font-semibold text-gray-900">{formatNaira(price)}</span>
-                  <span className="text-xs text-gray-400 ml-auto">
-                    {Math.round((price / productPrice) * 100)}% of listing
-                  </span>
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        <div className={`w-full rounded-2xl border-2 p-5 flex items-center justify-between bg-blue-50 border-blue-200`}>
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-full bg-blue-100 flex items-center justify-center">
-              <Wallet className="w-5 h-5 text-blue-600" />
+        {/* LEFT: Offer selection */}
+        <div className="flex-1 flex flex-col gap-4">
+          <div className="w-full bg-white border border-gray-100 rounded-2xl shadow-sm p-5">
+            <h3 className="font-semibold text-gray-900 mb-1">Select Your Offer Price</h3>
+            <p className="text-xs text-gray-400 mb-4">
+              Max offer: {formatNaira(offerPrices[0])} — choose a price to send to the seller.
+            </p>
+            <div className="flex flex-col gap-3">
+              {offerPrices.map(price => {
+                const isSelected = pendingPrice === price;
+                return (
+                  <button
+                    key={price}
+                    onClick={() => handleSelectOffer(price)}
+                    className={`flex items-center gap-3 px-4 py-3 rounded-2xl border-2 transition-all text-left
+                      ${isSelected ? 'border-blue-400 bg-blue-100' : 'border-gray-100 hover:border-blue-300 hover:bg-blue-50'}`}
+                  >
+                    <span className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-all
+                      ${isSelected ? 'border-blue-400 bg-blue-100' : 'border-gray-300 bg-white'}`}>
+                      {isSelected && <span className="w-2 h-2 rounded-full bg-blue-400" />}
+                    </span>
+                    <span className="text-sm font-semibold text-gray-900">{formatNaira(price)}</span>
+                    <span className="text-xs text-gray-400 ml-auto">
+                      {Math.round((price / productPrice) * 100)}% of listing
+                    </span>
+                  </button>
+                );
+              })}
             </div>
-            <span className="text-sm font-semibold text-blue-700">Wallet Balance</span>
           </div>
-          <span className="text-sm font-bold text-blue-700">{formatNaira(walletBalance)}</span>
         </div>
-      </>
+
+        {/* RIGHT: Product Card + Order Summary + Wallet */}
+        <div className="flex flex-col gap-4 lg:w-80 xl:w-96">
+          <CheckoutProductCard product={product} />
+
+          <div className="w-full bg-white border border-gray-100 rounded-2xl shadow-sm p-5">
+            <h3 className="font-semibold text-gray-900 mb-4">Order Summary</h3>
+            <div className="flex items-center justify-between py-2 border-b border-gray-100">
+              <span className="text-sm text-gray-500">Items</span>
+              <span className="text-sm font-medium text-gray-900">1</span>
+            </div>
+            <div className="flex items-center justify-between py-2 border-b border-gray-100">
+              <span className="text-sm font-semibold text-gray-900">Total</span>
+              <span className="text-sm font-bold text-gray-900">{formatNaira(productPrice)}</span>
+            </div>
+            <div className="flex items-center justify-between pt-3">
+              <div className="flex items-center gap-2">
+                <Wallet className="w-4 h-4 text-blue-500" />
+                <span className="text-sm font-semibold text-blue-700">Wallet Balance</span>
+              </div>
+              <span className="text-sm font-bold text-blue-700">{formatNaira(walletBalance)}</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
     );
   }
 

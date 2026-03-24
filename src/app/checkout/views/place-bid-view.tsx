@@ -107,13 +107,11 @@ export function PlaceBidView({ product, walletBalance, formatNaira, onTopUp }: P
 
   // ── BIDDING (main) ────────────────────────────────────────────
   return (
-    <>
-      <CheckoutProductCard product={product} />
+    <div className="flex flex-col lg:flex-row gap-6">
 
-      <div className="flex flex-col lg:flex-row gap-4">
-
-        {/* Right: Bid Input UI */}
-        <div className="flex-1 bg-white border border-gray-100 rounded-2xl shadow-sm p-5 flex flex-col gap-4">
+      {/* LEFT: Bid input + action */}
+      <div className="flex-1 flex flex-col gap-4">
+        <div className="bg-white border border-gray-100 rounded-2xl shadow-sm p-5 flex flex-col gap-4">
           <h3 className="font-semibold text-gray-900">Place Your Bid</h3>
 
           <div className="bg-gray-50 rounded-xl overflow-hidden border border-gray-100">
@@ -141,55 +139,62 @@ export function PlaceBidView({ product, walletBalance, formatNaira, onTopUp }: P
           </div>
         </div>
 
-        {/* Left: Bid Summary + Action */}
-        <div className="flex-1 flex flex-col gap-3">
-          <div className="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
-            {/* Your bid row */}
-            <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
-              <span className="text-sm text-gray-500">Your Bid</span>
-              <span className="text-sm font-semibold text-gray-900">
-                {bidAmount > 0 ? formatNaira(bidAmount) : '—'}
-              </span>
-            </div>
-            {/* Wallet row */}
-            <div className={`flex items-center justify-between px-4 py-3 transition-colors
-              ${bidAmount > 0 && isSufficient ? 'bg-blue-50' : bidAmount > 0 ? 'bg-red-50' : 'bg-white'}`}>
-              <div className="flex items-center gap-2">
-                <Wallet className={`w-4 h-4 
-                  ${bidAmount > 0 && isSufficient ? 'text-blue-500' : bidAmount > 0 ? 'text-red-400' : 'text-gray-400'}`} />
-                <span className={`text-sm font-semibold
-                  ${bidAmount > 0 && isSufficient ? 'text-blue-700' : bidAmount > 0 ? 'text-red-600' : 'text-gray-500'}`}>
-                  Wallet Balance
-                </span>
-              </div>
-              <span className={`text-sm font-bold
-                ${bidAmount > 0 && isSufficient ? 'text-blue-700' : bidAmount > 0 ? 'text-red-600' : 'text-gray-700'}`}>
-                {formatNaira(walletBalance)}
-              </span>
-            </div>
+        <div className="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
+          <div className="flex items-center justify-between px-4 py-3">
+            <span className="text-sm text-gray-500">Your Bid</span>
+            <span className="text-sm font-semibold text-gray-900">
+              {bidAmount > 0 ? formatNaira(bidAmount) : '—'}
+            </span>
           </div>
-
-          {/* Insufficient funds */}
-          {bidAmount > 0 && !isSufficient && (
-            <div className="flex items-center justify-between gap-2">
-              <p className="text-xs text-red-500">Insufficient funds.</p>
-              <button onClick={onTopUp} className="text-xs text-blue-600 font-semibold hover:underline">
-                Top Up
-              </button>
-            </div>
-          )}
-
-          <button
-            onClick={() => canBid && setBidState(isWinningBid ? 'won' : 'placed')}
-            disabled={!canBid}
-            className={`w-full py-3.5 rounded-3xl text-sm font-semibold transition-colors
-              ${canBid ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-gray-200 text-gray-400 cursor-not-allowed'}`}
-          >
-            Place Bid
-          </button>
         </div>
 
+        {bidAmount > 0 && !isSufficient && (
+          <div className="flex items-center justify-between gap-2">
+            <p className="text-xs text-red-500">Insufficient funds.</p>
+            <button onClick={onTopUp} className="text-xs text-blue-600 font-semibold hover:underline">
+              Top Up
+            </button>
+          </div>
+        )}
+
+        <button
+          onClick={() => canBid && setBidState(isWinningBid ? 'won' : 'placed')}
+          disabled={!canBid}
+          className={`w-full py-3.5 rounded-3xl text-sm font-semibold transition-colors
+            ${canBid ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-gray-200 text-gray-400 cursor-not-allowed'}`}
+        >
+          Place Bid
+        </button>
       </div>
-    </>
+
+      {/* RIGHT: Product Card + Order Summary + Wallet */}
+      <div className="flex flex-col gap-4 lg:w-80 xl:w-96">
+        <CheckoutProductCard product={product} />
+
+        <div className="w-full bg-white border border-gray-100 rounded-2xl shadow-sm p-5">
+          <h3 className="font-semibold text-gray-900 mb-4">Order Summary</h3>
+          <div className="flex items-center justify-between py-2 border-b border-gray-100">
+            <span className="text-sm text-gray-500">Items</span>
+            <span className="text-sm font-medium text-gray-900">1</span>
+          </div>
+          <div className="flex items-center justify-between py-2 border-b border-gray-100">
+            <span className="text-sm font-semibold text-gray-900">Total</span>
+            <span className="text-sm font-bold text-gray-900">{formatNaira(productPrice)}</span>
+          </div>
+          <div className={`flex items-center justify-between pt-3`}>
+            <div className="flex items-center gap-2">
+              <Wallet className={`w-4 h-4 ${bidAmount > 0 && !isSufficient ? 'text-red-400' : 'text-blue-500'}`} />
+              <span className={`text-sm font-semibold ${bidAmount > 0 && !isSufficient ? 'text-red-600' : 'text-blue-700'}`}>
+                Wallet Balance
+              </span>
+            </div>
+            <span className={`text-sm font-bold ${bidAmount > 0 && !isSufficient ? 'text-red-600' : 'text-blue-700'}`}>
+              {formatNaira(walletBalance)}
+            </span>
+          </div>
+        </div>
+      </div>
+
+    </div>
   );
 }
