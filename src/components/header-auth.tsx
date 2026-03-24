@@ -11,7 +11,6 @@ export function HeaderAuth() {
   const router = useRouter();
   const [isProfileOpen, setIsProfileOpen] = useState(false);
 
-  // ref now wraps the button + dropdown together
   const desktopProfileRef = useRef<HTMLDivElement>(null);
   const mobileProfileRef = useRef<HTMLDivElement>(null);
 
@@ -29,7 +28,7 @@ export function HeaderAuth() {
     <header className="w-full border-b">
       <div className="mx-auto max-w-full w-auto py-4 px-4">
 
-        {/* Desktop */}
+        {/* ── Desktop ── */}
         <div className="hidden md:flex h-16 items-center justify-between gap-6">
           <div className="flex items-center gap-4 shrink-0">
             <Image src="/vector1.png" alt="Storlo Logo" width={80} height={40} priority />
@@ -60,7 +59,6 @@ export function HeaderAuth() {
               </button>
             </div>
 
-            {/* ref wraps BOTH the toggle pill and the dropdown */}
             <div className="relative" ref={desktopProfileRef}>
               <div className="flex items-center gap-2 bg-[#f7f7f7] px-3 py-2 rounded-3xl shadow-md">
                 <button
@@ -76,9 +74,11 @@ export function HeaderAuth() {
           </div>
         </div>
 
-        {/* Mobile */}
+        {/* ── Mobile ── */}
         <div className="md:hidden flex flex-col py-3">
           <div className="flex items-center justify-between mb-4">
+
+            {/* Logo only */}
             <div className="flex items-center gap-2">
               <Image src="/vector1.png" alt="Storlo Logo" width={60} height={30} priority />
               <button className="p-2 hover:bg-gray-100 rounded-lg">
@@ -86,11 +86,10 @@ export function HeaderAuth() {
               </button>
             </div>
 
-            <button className="flex items-center gap-2 px-3 py-2 text-sm text-gray-500 border border-gray-300 rounded-full hover:bg-gray-50">
-              <MapPin className="h-4 w-4" />
-              <span className="text-gray-400">Garki, Abuja</span>
-            </button>
+            {/* Location pill */}
+           
 
+            {/* Bell + Profile pill — Sell is inside HeaderDropdown */}
             <div className="relative flex items-center gap-2 px-3 py-2 bg-[#f7f7f7] border rounded-3xl shadow-md" ref={mobileProfileRef}>
               <button onClick={() => router.push('/notifications')} className="p-1 text-gray-600 hover:text-black transition-colors">
                 <Bell className="h-5 w-5" />
@@ -103,7 +102,7 @@ export function HeaderAuth() {
                 <User className="h-5 w-5" />
                 <ChevronDown className={`h-4 w-4 transition-transform ${isProfileOpen ? 'rotate-180' : ''}`} />
               </button>
-              {isProfileOpen && <HeaderDropdown onClose={() => setIsProfileOpen(false)} />}
+              {isProfileOpen && <HeaderDropdown onClose={() => setIsProfileOpen(false)} showSell />}
             </div>
           </div>
 
