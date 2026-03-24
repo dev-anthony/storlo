@@ -114,7 +114,7 @@ export function MakeOfferView({ product, walletBalance, formatNaira, onTopUp }: 
         </div>
 
         {/* RIGHT: Product Card + Order Summary + Wallet */}
-        <div className="flex flex-col gap-4 lg:w-80 xl:w-96">
+        <div className="flex flex-col gap-4 flex-1">
           <CheckoutProductCard product={product} />
 
           <div className="w-full bg-white border border-gray-100 rounded-2xl shadow-sm p-5">

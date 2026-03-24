@@ -130,7 +130,7 @@ export default function CheckoutPage() {
       </div>
 
       <div className="flex-1 flex items-start justify-center px-4 py-10">
-        <div className={`w-full flex flex-col gap-6 ${isTwoColumn ? 'max-w-5xl' : 'max-w-xl'}`}>
+        <div className={`w-full flex flex-col gap-6 ${isTwoColumn ? '' : 'max-w-xl mx-auto'}`}>
           {mode === 'purchase'   && <PurchaseView  {...viewProps} />}
           {mode === 'make-offer' && <MakeOfferView {...viewProps} />}
           {mode === 'place-bid'  && <PlaceBidView  {...viewProps} />}
