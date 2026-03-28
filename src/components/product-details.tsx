@@ -1,10 +1,10 @@
-// 'use client';
 
-// import React, { useState } from 'react';
+// 'use client';
+// import React, { useState, useRef, useEffect } from 'react';
 // import Image from 'next/image';
-// import { ArrowLeft, Heart, MapPin, ChevronLeft, ChevronRight, Star } from 'lucide-react';
+// import { ArrowLeft, Heart, MapPin, ChevronLeft, ChevronRight, Star, ChevronDown } from 'lucide-react';
 // import { Product } from '@/app/types';
-// import {useRouter} from 'next/navigation';
+// import { useRouter } from 'next/navigation';
 
 // interface ProductDetailProps {
 //   product: Product;
@@ -16,7 +16,19 @@
 // export function ProductDetail({ product, onBack, onSave, isSaved }: ProductDetailProps) {
 //   const router = useRouter();
 //   const [imgIndex, setImgIndex] = useState(0);
+//   const [dropdownOpen, setDropdownOpen] = useState(false);
+//   const dropdownRef = useRef<HTMLDivElement>(null);
 //   const images = product.images?.length ? product.images : [product.image];
+
+//   useEffect(() => {
+//     const handler = (e: MouseEvent) => {
+//       if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+//         setDropdownOpen(false);
+//       }
+//     };
+//     document.addEventListener('mousedown', handler);
+//     return () => document.removeEventListener('mousedown', handler);
+//   }, []);
 
 //   const prev = () => setImgIndex(i => (i - 1 + images.length) % images.length);
 //   const next = () => setImgIndex(i => (i + 1) % images.length);
@@ -25,10 +37,16 @@
 //     ? product.ratings.reduce((s, r) => s + r.stars, 0) / product.ratings.length
 //     : 0;
 
-//   const starCounts = [5, 4, 3, 2, 1].map(star => ({
-//     star,
-//     count: product.ratings.filter(r => r.stars === star).length,
-//   }));
+//   const navigate = (mode: string) => {
+//     router.push(`/checkout?productId=${product.id}&mode=${mode}`);
+//     setDropdownOpen(false);
+//   };
+
+//   const actions = [
+//     { mode: 'purchase',   label: 'Purchase',    border: true },
+//     { mode: 'place-bid',  label: 'Place a Bid',  border: true },
+//     { mode: 'make-offer', label: 'Make Offer',   border: false },
+//   ];
 
 //   return (
 //     <div className="bg-white rounded-2xl shadow-md overflow-hidden">
@@ -37,28 +55,21 @@
 //         {/* LEFT */}
 //         <div className="lg:w-1/2 p-8 lg:p-10 flex flex-col overflow-y-auto">
 
-//           {/* Go Back | Save for Later */}
 //           <div className="flex items-center justify-between mb-6">
-//             <button
-//               onClick={onBack}
-//               className="flex items-center gap-2 text-gray-500 hover:text-gray-900 transition-colors text-sm font-medium"
-//             >
+//             <button onClick={onBack}
+//               className="flex items-center gap-2 text-gray-500 hover:text-gray-900 transition-colors text-sm font-medium">
 //               <ArrowLeft className="w-4 h-4" />
 //               Go Back
 //             </button>
-//             <button
-//               onClick={() => onSave(product.id)}
-//               className="flex items-center gap-2 text-gray-500 hover:text-red-500 transition-colors text-sm font-medium"
-//             >
+//             <button onClick={() => onSave(product.id)}
+//               className="flex items-center gap-2 text-gray-500 hover:text-red-500 transition-colors text-sm font-medium">
 //               <Heart className={`w-4 h-4 ${isSaved ? 'fill-red-500 text-red-500' : ''}`} />
 //               Save for Later
 //             </button>
 //           </div>
 
-//           {/* Name */}
 //           <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-3">{product.name}</h1>
 
-//           {/* Location + Date */}
 //           <div className="flex flex-wrap items-center gap-4 mb-5">
 //             <div className="flex items-center gap-1 text-gray-400">
 //               <MapPin className="w-4 h-4 shrink-0" />
@@ -67,10 +78,8 @@
 //             <span className="text-sm text-gray-400">{product.dateListed}</span>
 //           </div>
 
-//           {/* Description */}
 //           <p className="text-gray-600 text-sm leading-relaxed mb-6">{product.description}</p>
 
-//           {/* Condition / Size / Quality */}
 //           <div className="grid grid-cols-3 border border-gray-200 rounded-xl overflow-hidden mb-6">
 //             {[
 //               { label: 'Condition', value: product.condition },
@@ -84,91 +93,102 @@
 //             ))}
 //           </div>
 
-//           {/* Price + Purchase */}
+//           {/* Price + dropdown action button */}
 //           <div className="flex items-center justify-between mb-8">
 //             <span className="text-2xl font-bold text-gray-900">{product.price}</span>
-//             <button onClick={() => router.push(`/checkout?productId=${product.id}`)} className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-3xl text-sm font-semibold transition-colors">
-//               Purchase
-//             </button>
+
+//             <div className="relative" ref={dropdownRef}>
+//               {/* Split button */}
+//               <div className="flex rounded-3xl overflow-hidden shadow-sm">
+//                 <button
+//                   onClick={() => navigate('purchase')}
+//                   className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 text-sm font-semibold transition-colors"
+//                 >
+//                   Purchase
+//                 </button>
+//                 <button
+//                   onMouseDown={e => e.stopPropagation()}
+//                   onClick={() => setDropdownOpen(p => !p)}
+//                   className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-3 border-l border-blue-500 transition-colors"
+//                 >
+//                   <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${dropdownOpen ? 'rotate-180' : ''}`} />
+//                 </button>
+//               </div>
+
+//               {dropdownOpen && (
+//                 <div
+//                   onMouseDown={e => e.stopPropagation()}
+//                   className="absolute right-0 top-full mt-2 bg-white border border-gray-200 rounded-2xl shadow-xl z-20 overflow-hidden min-w-[160px]"
+//                 >
+//                   {actions.map(action => (
+//                     <button
+//                       key={action.mode}
+//                       onClick={() => navigate(action.mode)}
+//                       className={`w-full px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 text-left transition-colors
+//                         ${action.border ? 'border-b border-gray-100' : ''}`}
+//                     >
+//                       {action.label}
+//                     </button>
+//                   ))}
+//                 </div>
+//               )}
+//             </div>
 //           </div>
 
 //           {/* Ratings */}
-//          {/* Ratings & Reviews */}
-//             <div className="w-full">
-
-//             {/* Review cards */}
+//           <div className="w-full">
 //             {product.ratings.length === 0 ? (
-//                 <p className="text-sm text-gray-400">No reviews yet.</p>
+//               <p className="text-sm text-gray-400">No reviews yet.</p>
 //             ) : (
-//                 <div className="flex flex-col gap-3">
+//               <div className="flex flex-col gap-3">
 //                 {product.ratings.map(r => (
-//                     <div key={r.id} className="border border-gray-100 rounded-2xl p-4 bg-gray-50">
-
-//                     {/* Top row: avatar + name + verified tag */}
+//                   <div key={r.id} className="border border-gray-100 rounded-2xl p-4 bg-gray-50">
 //                     <div className="flex items-center gap-3 mb-3">
-//                         <img
-//                         src={r.avatar}
-//                         alt={r.user}
-//                         className="w-10 h-10 rounded-full object-cover shrink-0"
-//                         />
-//                         <div className="flex-1 min-w-0">
+//                       <img src={r.avatar} alt={r.user} className="w-10 h-10 rounded-full object-cover shrink-0" />
+//                       <div className="flex-1 min-w-0">
 //                         <div className="flex items-center justify-between gap-2">
-//                             <span className="text-sm font-semibold text-gray-900 truncate">{r.user}</span>
-//                             <span className="text-xs text-gray-400 shrink-0">{r.stars} verified rating</span>
+//                           <span className="text-sm font-semibold text-gray-900 truncate">{r.user}</span>
+//                           <span className="text-xs text-gray-400 shrink-0">{r.stars} verified rating</span>
 //                         </div>
 //                         <div className="flex gap-0.5 mt-1">
-//                             {[1, 2, 3, 4, 5].map(s => (
+//                           {[1, 2, 3, 4, 5].map(s => (
 //                             <Star key={s} className={`w-3 h-3 ${s <= r.stars ? 'fill-yellow-400 text-yellow-400' : 'text-gray-200'}`} />
-//                             ))}
+//                           ))}
 //                         </div>
-//                         </div>
+//                       </div>
 //                     </div>
-
 //                     <p className="text-xs text-gray-600 leading-relaxed">{r.comment}</p>
 //                     <span className="text-xs text-gray-300 mt-2 block">{r.date}</span>
-//                     </div>
+//                   </div>
 //                 ))}
-//                 </div>
+//               </div>
 //             )}
-//             </div>
+//           </div>
 //         </div>
 
 //         {/* RIGHT — image slider */}
 //         <div className="lg:w-1/2 relative bg-gray-100 min-h-[400px] lg:min-h-full">
-//           <Image
-//             src={images[imgIndex]}
-//             alt={product.name}
-//             fill
-//             className="object-cover"
-//             priority
-//           />
-
+//           <Image src={images[imgIndex]} alt={product.name} fill className="object-cover" priority />
 //           {images.length > 1 && (
 //             <>
-//               <button
-//                 onClick={prev}
-//                 className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/80 hover:bg-white rounded-full flex items-center justify-center shadow-lg z-10"
-//               >
+//               <button onClick={prev}
+//                 className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/80 hover:bg-white rounded-full flex items-center justify-center shadow-lg z-10">
 //                 <ChevronLeft className="w-5 h-5 text-gray-800" />
 //               </button>
-//               <button
-//                 onClick={next}
-//                 className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/80 hover:bg-white rounded-full flex items-center justify-center shadow-lg z-10"
-//               >
+//               <button onClick={next}
+//                 className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/80 hover:bg-white rounded-full flex items-center justify-center shadow-lg z-10">
 //                 <ChevronRight className="w-5 h-5 text-gray-800" />
 //               </button>
 //               <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
 //                 {images.map((_, i) => (
-//                   <button
-//                     key={i}
-//                     onClick={() => setImgIndex(i)}
-//                     className={`w-2 h-2 rounded-full transition-colors ${i === imgIndex ? 'bg-white' : 'bg-white/40'}`}
-//                   />
+//                   <button key={i} onClick={() => setImgIndex(i)}
+//                     className={`w-2 h-2 rounded-full transition-colors ${i === imgIndex ? 'bg-white' : 'bg-white/40'}`} />
 //                 ))}
 //               </div>
 //             </>
 //           )}
 //         </div>
+
 //       </div>
 //     </div>
 //   );
@@ -179,6 +199,7 @@ import Image from 'next/image';
 import { ArrowLeft, Heart, MapPin, ChevronLeft, ChevronRight, Star, ChevronDown } from 'lucide-react';
 import { Product } from '@/app/types';
 import { useRouter } from 'next/navigation';
+import { useOrders, OrderMode } from '@/app/context/order-context';
 
 interface ProductDetailProps {
   product: Product;
@@ -189,6 +210,7 @@ interface ProductDetailProps {
 
 export function ProductDetail({ product, onBack, onSave, isSaved }: ProductDetailProps) {
   const router = useRouter();
+  const { addOrUpdateOrder } = useOrders();
   const [imgIndex, setImgIndex] = useState(0);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -207,19 +229,16 @@ export function ProductDetail({ product, onBack, onSave, isSaved }: ProductDetai
   const prev = () => setImgIndex(i => (i - 1 + images.length) % images.length);
   const next = () => setImgIndex(i => (i + 1) % images.length);
 
-  const avgRating = product.ratings.length
-    ? product.ratings.reduce((s, r) => s + r.stars, 0) / product.ratings.length
-    : 0;
-
-  const navigate = (mode: string) => {
+  const navigate = (mode: OrderMode) => {
+    addOrUpdateOrder(product, mode);
     router.push(`/checkout?productId=${product.id}&mode=${mode}`);
     setDropdownOpen(false);
   };
 
-  const actions = [
+  const actions: { mode: OrderMode; label: string; border: boolean }[] = [
     { mode: 'purchase',   label: 'Purchase',    border: true },
-    { mode: 'place-bid',  label: 'Place a Bid',  border: true },
-    { mode: 'make-offer', label: 'Make Offer',   border: false },
+    { mode: 'bid',  label: 'Place a Bid', border: true },
+    { mode: 'offer', label: 'Make Offer',  border: false },
   ];
 
   return (
@@ -267,12 +286,11 @@ export function ProductDetail({ product, onBack, onSave, isSaved }: ProductDetai
             ))}
           </div>
 
-          {/* Price + dropdown action button */}
+          {/* Price + split dropdown button */}
           <div className="flex items-center justify-between mb-8">
             <span className="text-2xl font-bold text-gray-900">{product.price}</span>
 
             <div className="relative" ref={dropdownRef}>
-              {/* Split button */}
               <div className="flex rounded-3xl overflow-hidden shadow-sm">
                 <button
                   onClick={() => navigate('purchase')}
