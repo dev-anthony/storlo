@@ -26,12 +26,15 @@ export default function VerifyEmailPassordPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-
   const placeholderEmail = 'user@example.com';
+  // This page is statically prerendered, so localStorage can only be read
+  // client-side — an effect (not a lazy useState initializer) is required
+  // here to avoid a server-render crash.
   useEffect(() => {
-  const code = localStorage.getItem('verified_code');
-  if (code && code.length === 6) setCodeVerified(true);
-}, []);
+    const code = localStorage.getItem('verified_code');
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    if (code && code.length === 6) setCodeVerified(true);
+  }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;

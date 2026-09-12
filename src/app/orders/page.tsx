@@ -34,7 +34,7 @@ export default function OrdersPage() {
               <div className="flex flex-col gap-2">
                 <h3 className="text-xl font-bold text-gray-900">You have no orders yet</h3>
                 <p className="text-sm text-gray-400 leading-relaxed max-w-xs">
-                  You haven't placed any orders yet. Explore more products to make your first purchase.
+                  You haven&apos;t placed any orders yet. Explore more products to make your first purchase.
                 </p>
               </div>
               <Button

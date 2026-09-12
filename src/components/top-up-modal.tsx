@@ -28,6 +28,9 @@ export function TopUpModal({ isOpen, onClose, onSuccess }: TopUpModalProps) {
   // countdown timer
   useEffect(() => {
     if (!isOpen || state !== 'form') return;
+    // The reset is the interval's starting value, not derived state, so it
+    // stays paired with the subscription setup rather than split out.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setTimeLeft(300);
     const interval = setInterval(() => {
       setTimeLeft(prev => {
@@ -206,7 +209,7 @@ export function TopUpModal({ isOpen, onClose, onSuccess }: TopUpModalProps) {
                 disabled={timeLeft === 0}
                 className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed text-white text-sm font-semibold py-3 rounded-3xl transition-colors"
               >
-                I've Sent the Money
+                I&apos;ve Sent the Money
               </button>
             </div>
           </>

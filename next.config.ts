@@ -1,5 +1,12 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+import path from 'path';
+import type { NextConfig } from 'next';
+
+const nextConfig: NextConfig = {
+  // Silences "ignored package-lock.json" — Next was inferring the monorepo
+  // root from a lockfile it found in a parent folder outside this repo.
+  turbopack: {
+    root: path.resolve(__dirname),
+  },
   images: {
     remotePatterns: [
       {
@@ -10,4 +17,4 @@ const nextConfig = {
   },
 };
 
-module.exports = nextConfig;
+export default nextConfig;

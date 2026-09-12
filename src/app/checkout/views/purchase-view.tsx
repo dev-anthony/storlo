@@ -24,8 +24,12 @@ export function PurchaseView({ product, walletBalance, formatNaira, onTopUp }: P
   const [confirmed, setConfirmed] = useState(false);
   const productPrice = Number(product.price.replace(/[₦,]/g, ''));
   const hasSufficientFunds = walletBalance >= productPrice;
-  const orderId = `STL-${product.id}-${Date.now().toString().slice(-6)}`;
-  const orderDate = new Date().toLocaleDateString('en-NG', { day: 'numeric', month: 'long', year: 'numeric' });
+  // Generated once per checkout session (not on every render) so the order
+  // reference stays stable, matching what the escrow/order record would use.
+  const [orderId] = useState(() => `STL-${product.id}-${Date.now().toString().slice(-6)}`);
+  const [orderDate] = useState(() =>
+    new Date().toLocaleDateString('en-NG', { day: 'numeric', month: 'long', year: 'numeric' })
+  );
 
   if (confirmed) {
     return (

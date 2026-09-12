@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -18,8 +18,14 @@ const inputCls =
 
 export function EditModal({ isOpen, profile, onClose, onSave }: EditModalProps) {
   const [form, setForm] = useState<UserProfile>(profile);
-
-  useEffect(() => { setForm(profile); }, [profile]);
+  // Reset the draft when a different profile comes in (e.g. modal reopened),
+  // adjusted during render per React's guidance instead of via an effect —
+  // avoids the extra render an effect would cause.
+  const [prevProfile, setPrevProfile] = useState(profile);
+  if (profile !== prevProfile) {
+    setPrevProfile(profile);
+    setForm(profile);
+  }
 
   const set = (key: keyof UserProfile, val: string) =>
     setForm(p => ({ ...p, [key]: val }));

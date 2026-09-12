@@ -36,8 +36,12 @@ export function PlaceBidView({ product, walletBalance, formatNaira, onTopUp }: P
   const canBid = isBidValid && isSufficient;
   const isWinningBid = bidAmount > currentHighestBid * 1.3;
 
-  const orderId = `STL-${product.id}-${Date.now().toString().slice(-6)}`;
-  const orderDate = new Date().toLocaleDateString('en-NG', { day: 'numeric', month: 'long', year: 'numeric' });
+  // Generated once per checkout session (not on every render) so the order
+  // reference stays stable, matching what the escrow/order record would use.
+  const [orderId] = useState(() => `STL-${product.id}-${Date.now().toString().slice(-6)}`);
+  const [orderDate] = useState(() =>
+    new Date().toLocaleDateString('en-NG', { day: 'numeric', month: 'long', year: 'numeric' })
+  );
 
   const renderBidDetailsTable = () => (
     <div className="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">

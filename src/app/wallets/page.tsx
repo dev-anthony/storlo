@@ -101,7 +101,7 @@ export default function WalletsPage() {
                     Welcome to Storlo. Your account is ready!.
                   </span>
                   <br />
-                  To buy products, make offers, and place bids, you'll need a Storlo wallet.
+                  To buy products, make offers, and place bids, you&apos;ll need a Storlo wallet.
                   Creating your wallet takes less than a minute.
                 </p>
               </div>

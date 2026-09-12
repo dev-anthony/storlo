@@ -30,7 +30,7 @@ export default function Promt() {
             <h1 className="text-3xl font-bold text-gray-900 mb-2">Account Created Successfully</h1>
             <p className="text-gray-600 leading-relaxed text-sm">
            <span className="font-semibold text-sm"> Welcome to Storlo. Your account is ready!.</span> <br></br>
-                To buy products, make offers, and place bids, you'll need a Storlo wallet. Creating your wallet takes less than a minute.
+                To buy products, make offers, and place bids, you&apos;ll need a Storlo wallet. Creating your wallet takes less than a minute.
             </p>
           </div>
 

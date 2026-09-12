@@ -84,8 +84,8 @@ export const allProducts: Product[] = [
   {
     id: 9, name: 'Ankara Wrap Skirt', category: 'Fashion', subCategory: 'Female',
     location: 'Kado, Abuja', price: '₦12,000',
-    image: 'https://images.unsplash.com/photo-1583496661160-fb5886a773d5?w=500&auto=format&fit=crop',
-    images: ['https://images.unsplash.com/photo-1583496661160-fb5886a773d5?w=800&auto=format&fit=crop'],
+    image: 'https://images.unsplash.com/photo-1596783074918-c84cb06531ca?w=500&auto=format&fit=crop',
+    images: ['https://images.unsplash.com/photo-1596783074918-c84cb06531ca?w=800&auto=format&fit=crop'],
     description: 'Vibrant Ankara wrap skirt. One size fits most. Never worn, still tagged.',
     condition: 'New', size: 'One Size', quality: 'Good', dateListed: 'Listed 3 days ago',
     ratings: [{ id: 1, user: 'Ngozi B.', avatar: 'https://randomuser.me/api/portraits/women/62.jpg', stars: 5, comment: 'Love it!', date: 'Mar 8, 2025' }],

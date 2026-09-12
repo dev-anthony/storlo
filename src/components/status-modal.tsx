@@ -22,8 +22,16 @@ export function StatusModal({
 }: StatusModalProps) {
   const [isDone, setIsDone] = useState(false);
 
+  // Reset when the modal closes, adjusted during render (React's guidance)
+  // instead of via an effect — avoids the extra render an effect would cause.
+  const [prevIsOpen, setPrevIsOpen] = useState(isOpen);
+  if (isOpen !== prevIsOpen) {
+    setPrevIsOpen(isOpen);
+    if (!isOpen) setIsDone(false);
+  }
+
   useEffect(() => {
-    if (!isOpen) { setIsDone(false); return; }
+    if (!isOpen) return;
     const t = setTimeout(() => setIsDone(true), autoAdvanceMs);
     return () => clearTimeout(t);
   }, [isOpen, autoAdvanceMs]);

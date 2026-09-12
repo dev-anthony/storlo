@@ -37,8 +37,12 @@ export function MakeOfferView({ product, walletBalance, formatNaira, onTopUp }: 
   const [selectedOffer, setSelectedOffer] = useState<number | null>(null);
   const [pendingPrice, setPendingPrice] = useState<number | null>(null);
 
-  const orderId = `STL-${product.id}-${Date.now().toString().slice(-6)}`;
-  const orderDate = new Date().toLocaleDateString('en-NG', { day: 'numeric', month: 'long', year: 'numeric' });
+  // Generated once per checkout session (not on every render) so the order
+  // reference stays stable, matching what the escrow/order record would use.
+  const [orderId] = useState(() => `STL-${product.id}-${Date.now().toString().slice(-6)}`);
+  const [orderDate] = useState(() =>
+    new Date().toLocaleDateString('en-NG', { day: 'numeric', month: 'long', year: 'numeric' })
+  );
   const negotiatedPrice = selectedOffer ? Math.round(selectedOffer * 1.15 / 1000) * 1000 : 0;
 
   const handleSelectOffer = (price: number) => {
@@ -150,7 +154,7 @@ export function MakeOfferView({ product, walletBalance, formatNaira, onTopUp }: 
           <h2 className="text-2xl font-bold text-gray-900">Offer Sent Successfully!</h2>
           <p className="text-sm text-gray-500 leading-relaxed max-w-sm">
             Your offer of <span className="font-semibold text-gray-900">{formatNaira(selectedOffer!)}</span>{' '}
-            has been sent to <span className="font-semibold text-gray-900">{MOCK_SELLER.name}</span>. We'll let you
+            has been sent to <span className="font-semibold text-gray-900">{MOCK_SELLER.name}</span>. We&apos;ll let you
             know as soon as the seller, {MOCK_SELLER.name} responds.
           </p>
         </div>
